@@ -312,7 +312,7 @@ async function uploadPFPToStorage(userId, imageData) {
         
         // Upload file to Supabase Storage
         const { data, error } = await supabase.storage
-            .from('group1-pfps')
+            .from('group2-pfps')
             .upload(`${userId}.jpg`, file);
         
         if (error) {
@@ -323,7 +323,7 @@ async function uploadPFPToStorage(userId, imageData) {
         console.log('✓ PFP uploaded to Storage');
         
         const { data: urlData } = supabase.storage
-            .from('group1-pfps')
+            .from('group2-pfps')
             .getPublicUrl(`${userId}.jpg`);
         
         console.log('✓ PFP URL:', urlData.publicUrl);

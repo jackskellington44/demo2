@@ -473,7 +473,7 @@ async function loadCategories() {
   const { data, error } = await supabase
     .from('categories')
     .select('*')
-    .eq('group_id', 'group1')
+    .eq('group_id', 'group2')
     .order('name', { ascending: true });
 
   if (error) {
@@ -500,7 +500,7 @@ async function handleAddCategory() {
   try {
     const { error } = await supabase
       .from('categories')
-      .insert([{ name: name, group_id: 'group1' }]);
+      .insert([{ name: name, group_id: 'group2' }]);
 
     if (error) throw error;
 
@@ -525,7 +525,7 @@ async function loadLinks() {
   const { data, error } = await supabase
     .from('post_links')
     .select('id, a_post_id, b_post_id')
-    .eq('group_id', 'group1');
+    .eq('group_id', 'group2');
 
   if (error) {
     console.error('Failed to load links:', error);
@@ -653,13 +653,13 @@ async function handlePostSubmit() {
 
       const filePath = `${currentUser.id}/${Date.now()}-${file.name}`;
       const { error: uploadError } = await supabase.storage
-        .from('group1-posts')
+        .from('group2-posts')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: urlData } = supabase.storage
-        .from('group1-posts')
+        .from('group2-posts')
         .getPublicUrl(filePath);
 
       fileURL = urlData.publicUrl;
@@ -696,7 +696,7 @@ async function handlePostSubmit() {
 
     // CREATE
     postRecord.user_id = currentUser.id;
-    postRecord.group_id = 'group1';
+    postRecord.group_id = 'group2';
 
     if (!file) {
       postRecord.file_url = null;
@@ -723,7 +723,7 @@ async function handlePostSubmit() {
       const { error: linkErr } = await supabase
         .from('post_links')
         .insert([{
-          group_id: 'group1',
+          group_id: 'group2',
           a_post_id,
           b_post_id,
           created_by: currentUser.id
@@ -772,13 +772,13 @@ async function handleCoverImageSubmit() {
   try {
     const filePath = `${currentUser.id}/covers/${Date.now()}-${coverFile.name}`;
     const { error: uploadError } = await supabase.storage
-      .from('group1-posts')
+      .from('group2-posts')
       .upload(filePath, coverFile);
 
     if (uploadError) throw uploadError;
 
     const { data: urlData } = supabase.storage
-      .from('group1-posts')
+      .from('group2-posts')
       .getPublicUrl(filePath);
 
     pendingPost.cover_image_url = urlData.publicUrl;
@@ -947,7 +947,7 @@ async function loadPosts() {
     let query = supabase
       .from('posts')
       .select('*')
-      .eq('group_id', 'group1')
+      .eq('group_id', 'group2')
       .order('created_at', { ascending: false });
 
     if (editMode) {
